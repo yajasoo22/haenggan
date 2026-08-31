@@ -11,7 +11,11 @@ export default function Haenggan() {
   const [result, setResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const canAnalyze = text.trim().length >= 40 && status !== "loading";
+  const trimmed = text.trim();
+  const isUrlInput = /^https?:\/\/\S+$/i.test(trimmed);
+  const canAnalyze =
+    status !== "loading" &&
+    (isUrlInput ? trimmed.length > 10 : trimmed.length >= 40);
 
   async function handleAnalyze() {
     setStatus("loading");
@@ -82,14 +86,14 @@ export default function Haenggan() {
 
         <div className="hg-margin">
           <label htmlFor="article" style={styles.label}>
-            기사 본문
+            기사 본문 또는 기사 주소
           </label>
           <textarea
             id="article"
             className="hg-textarea"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder={`기사 전문을 붙여넣으세요.\n\n예: ${SAMPLE}`}
+            placeholder={`기사 전문을 붙여넣거나, 기사 주소(URL)를 붙여넣으세요.\n\n예: ${SAMPLE}`}
             style={styles.textarea}
             rows={10}
           />
